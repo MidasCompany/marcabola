@@ -5,10 +5,18 @@ import Inicial from './pages/inicial';
 import Login from './pages/login';
 import Register from './pages/register';
 import Main from './pages/main';
+import Profile from './pages/profile';
+import FAQ from './pages/faq';
+import Question from './pages/question';
+import Arenas from './pages/arenas';
 
 
 const Routes = createAppContainer(
     createStackNavigator({
+        ArenasPage: Arenas,
+        QuestionPage: Question,
+        FAQPage: FAQ,
+        ProfilePage: Profile,
         MainPage: Main,
         RegisterPage: Register,
         LoginPage: Login,

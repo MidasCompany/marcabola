@@ -14,6 +14,8 @@ export default class Inicial extends Component{
         //this.state = {isLoading: true}
     }
 
+    
+
     render(){
         return(
             <View style={{backgroundColor: '#052623', flex: 1, justifyContent: 'center'}}>
@@ -28,7 +30,8 @@ export default class Inicial extends Component{
                         <Text style={{color: '#36D25C', fontSize: hp('5%'), textAlign: 'center'}}>cadastro</Text>
                     </TouchableOpacity>
                 </View>
-            </View>
+            </View>            
         )
+        
     }
 }

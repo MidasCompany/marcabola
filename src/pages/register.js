@@ -29,6 +29,7 @@ export default class Register extends Component{
                         <TextInput placeholder='nome completo' placeholderTextColor='#36D25C' style={styles.textfield} />
                         <TextInput placeholder='e-mail' placeholderTextColor='#36D25C' style={styles.textfield} />
                         <TextInput placeholder='cpf' placeholderTextColor='#36D25C' style={styles.textfield} />
+                        <TextInput placeholder='telefone' placeholderTextColor='#36D25C' style={styles.textfield} />
                         <TextInput placeholder='data de nasc.' placeholderTextColor='#36D25C' style={styles.textfield} />
                         <TextInput placeholder='nome de usuario' placeholderTextColor='#36D25C' style={styles.textfield} />
                         <TextInput placeholder='senha' placeholderTextColor='#36D25C' style={styles.textfield} />
