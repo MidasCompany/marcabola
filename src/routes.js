@@ -9,10 +9,12 @@ import Profile from './pages/profile';
 import FAQ from './pages/faq';
 import Question from './pages/question';
 import Arenas from './pages/arenas';
+import Arena from './pages/arena';
 
 
 const Routes = createAppContainer(
     createStackNavigator({
+        ArenaPage: Arena,
         ArenasPage: Arenas,
         QuestionPage: Question,
         FAQPage: FAQ,
