@@ -20,7 +20,12 @@ export default class Arena extends Component {
         </View>
         <View style={styles.backgroundImage}>
         </View>
-        <Text>Arena</Text>
+        <Text style={styles.textArenaName}>Arena</Text>
+        <View style={{}}>
+        <Text style={styles.textArenaProps}>5,0</Text>
+        <Text style={styles.textArenaProps}>5,0</Text>
+        <Text style={styles.textArenaProps}>5,0</Text>
+        </View>
     </View>
     );
   }
@@ -66,6 +71,15 @@ const styles = StyleSheet.create(
         height: '15%',
         alignSelf: 'center',
         borderRadius: hp('6%')
+    },
+    textArenaName:{
+        color: '#23B050',
+        fontSize: hp('4%'),
+        textAlign: 'center'
+    },
+    textArenaProps: {
+        color: 'white',
+        fontSize: hp('2%')
     }
 
 
