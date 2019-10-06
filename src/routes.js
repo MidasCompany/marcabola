@@ -10,20 +10,21 @@ import FAQ from './pages/faq';
 import Question from './pages/question';
 import Arenas from './pages/arenas';
 import Arena from './pages/arena';
+import Reserves from './pages/reserves';
 
 
 const Routes = createAppContainer(
     createStackNavigator({
+        InicialPage: Inicial,
+        RegisterPage: Register,
+        LoginPage: Login,       
+        MainPage: Main, 
+        ReservesPage: Reserves,
         ArenaPage: Arena,
         ArenasPage: Arenas,
         QuestionPage: Question,
         FAQPage: FAQ,
         ProfilePage: Profile,
-        MainPage: Main,
-        RegisterPage: Register,
-        LoginPage: Login,
-        InicialPage: Inicial,
-        
     }, {
         defaultNavigationOptions:{
             header: null,

@@ -19,10 +19,12 @@ export default class Main extends Component {
             <TouchableOpacity style={{alignSelf: 'flex-start', margin: '4%', marginBottom: '1%', height: hp('6%'), width: wp('8%')}}>
                 <Image source={MenuIcon} style={{ height: '100%', width: '100%', resizeMode: 'stretch'}}/>
             </TouchableOpacity>
-                <TouchableOpacity style={styles.roundedbox_arenas}>
+                <TouchableOpacity onPress={()=> this.props.navigation.navigate('ArenasPage')}
+                style={styles.roundedbox_arenas}>
                     <Text style={styles.text}>Arenas</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.roundedbox_check}>
+                <TouchableOpacity onPress={()=> this.props.navigation.navigate('ReservesPage')}
+                style={styles.roundedbox_check}>
                     <Text style={styles.text}>Bolas marcadas</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.roundedbox_history}>

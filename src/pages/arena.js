@@ -61,7 +61,8 @@ export default class Arena extends Component {
         <View style={styles.allItems}>
             <View style>
                 <View style={styles.superiorItems}>
-                    <TouchableOpacity style={styles.xMarkBox}>
+                    <TouchableOpacity onPress={()=> this.props.navigation.goBack()}
+                    style={styles.xMarkBox}>
                         <Image source={xMark} style={styles.xMark}/>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.favoriteBackground}>
