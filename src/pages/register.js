@@ -6,13 +6,35 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 
 
 import Logo from '../../assets/logocalendario.png';
-
+import api from '../services/api'
 import Button from '../../assets/enterbuttonup.png';
 
 export default class Register extends Component{
     constructor(props){
         super(props);
-        //this.state = {isLoading: true}
+        this.state = {
+            email: null,
+            cpf: null,
+            username: null,
+            password: null,
+            telefone: null,
+            data_nasc: null,
+        }
+    }
+
+    register = async () => {
+        try{
+            const response = api.post('api/sessions', {
+                email: "jonasjunnior@gmail.com",
+                cpf: "03050968265",
+                username: "jonasjunnior",
+            })
+
+            console.log(response.data)
+        }
+        catch(response){
+            console.log(response)
+        }
     }
 
     render(){
@@ -34,7 +56,7 @@ export default class Register extends Component{
                         <TextInput placeholder='data de nasc.' placeholderTextColor='#36D25C' style={styles.textfield} />
                         <TextInput placeholder='nome de usuario' placeholderTextColor='#36D25C' style={styles.textfield} />
                         <TextInput placeholder='senha' placeholderTextColor='#36D25C' style={styles.textfield} />
-                        <TouchableOpacity onPress={()=> this.props.navigation.navigate('MainPage')}
+                        <TouchableOpacity onPress={this.register}
                         style={{height: '20%', width: '20%', alignSelf: 'center', margin: '3%', marginBottom: 0}}>
                             <Image source={Button} style={{height: '100%', width: '100%', resizeMode: 'center', justifyContent: 'center', alignSelf: 'center'}}/>
                         </TouchableOpacity>

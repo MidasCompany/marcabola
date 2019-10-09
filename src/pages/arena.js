@@ -65,9 +65,6 @@ export default class Arena extends Component {
                     style={styles.xMarkBox}>
                         <Image source={xMark} style={styles.xMark}/>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.favoriteBackground}>
-                    <Text style={styles.favoriteText}>Favorito</Text>
-                    </TouchableOpacity>
                 </View>
                 <View style={styles.backgroundArenaImage}>
                 </View>

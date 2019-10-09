@@ -26,10 +26,7 @@ export default class Reserves extends Component {
         };
 
       }
-    
       
-      
-
       selectionData = (_day) => {
         console.log(this.state);
         this.setState(
