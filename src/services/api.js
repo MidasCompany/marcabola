@@ -1,29 +1,29 @@
-import {create} from 'apisauce'
+import {create} from 'apisauce';
 
-const tokens = {}
+const tokens = {};
 
 const api = create({
-    baseURL : 'http://192.168.15.9:8080/',
-    headers: {
-        'Access-Control-Allow-Origin': '*',
-        "Content-Type": "application/x-www-form-urlencoded",
-        Accept: "application/json"
-    }
+  baseURL: 'http://192.168.0.3:8080/',
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  },
 });
 
-api.addResponseTransform((response) => {
-    if (response.ok) {
-      if (response.headers.authentication) {
-        tokens.jwtToken = response.headers.authentication
-      }
+api.addResponseTransform(response => {
+  if (response.ok) {
+    if (response.headers.authentication) {
+      tokens.jwtToken = response.headers.authentication;
     }
-  })
+  } else {
+    throw response;
+  }
+});
 
-  api.addRequestTransform((request) => {
-    if (tokens.jwtToken) {
-      request.headers.Authentication = `Bearer ${tokens.jwtToken}`
-    }
-  })
-
+api.addRequestTransform(request => {
+  if (tokens.jwtToken) {
+    request.headers.Authentication = `Bearer ${tokens.jwtToken}`;
+  }
+});
 
 export default api;

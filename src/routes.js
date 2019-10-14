@@ -1,5 +1,5 @@
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+import {createAppContainer} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation-stack';
 
 import Inicial from './pages/inicial';
 import Login from './pages/login';
@@ -12,27 +12,29 @@ import Arenas from './pages/arenas';
 import Arena from './pages/arena';
 import Reserves from './pages/reserves';
 
-
 const Routes = createAppContainer(
-    createStackNavigator({
-        InicialPage: Inicial,
-        RegisterPage: Register,
-        LoginPage: Login,       
-        MainPage: Main, 
-        ReservesPage: Reserves,
-        ArenaPage: Arena,
-        ArenasPage: Arenas,
-        QuestionPage: Question,
-        FAQPage: FAQ,
-        ProfilePage: Profile,
-    }, {
-        defaultNavigationOptions:{
-            header: null,
-        }
+  createStackNavigator(
+    {
+      InicialPage: Inicial,
+      RegisterPage: Register,
+      LoginPage: Login,
+      MainPage: Main,
+      ReservesPage: Reserves,
+      ArenaPage: Arena,
+      ArenasPage: Arenas,
+      QuestionPage: Question,
+      FAQPage: FAQ,
+      ProfilePage: Profile,
     },
     {
-        initialRouteName: "InitialPage"
-    })
+      defaultNavigationOptions: {
+        header: null,
+      },
+    },
+    {
+      initialRouteName: 'InitialPage',
+    },
+  ),
 );
 
 export default Routes;
