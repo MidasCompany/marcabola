@@ -8,7 +8,7 @@ import {
   Button,
   Image,
   TouchableOpacity,
-  Platform,
+  AsyncStorage,
 } from 'react-native';
 import {CalendarList, LocaleConfig} from 'react-native-calendars';
 
@@ -43,13 +43,11 @@ export default class Arena extends Component {
   }
 
   selectionData = _day => {
-    console.log(this.state);
     this.setState(
       (this.state.dateSelected = {
         [_day.dateString]: {selected: true, selectedColor: '#7C038C'},
       }),
     );
-    console.log(this.state.markedDates);
   };
 
   getDaysInMonth(month, year, days) {
@@ -72,6 +70,19 @@ export default class Arena extends Component {
     }
 
     return dates;
+  }
+
+  isLogged = async () => {
+    const token = await AsyncStorage.getItem('@CodeApi:token');
+    if (!token) {
+      this.props.navigation.navigate('LoginPage');
+    }
+  };
+  componentDidUpdate() {
+    this.isLogged();
+  }
+  componentDidMount() {
+    this.isLogged();
   }
 
   render() {

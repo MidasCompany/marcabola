@@ -6,8 +6,7 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
-  FlatList,
-  TextInput,
+  AsyncStorage,
 } from 'react-native';
 
 import {
@@ -21,6 +20,18 @@ export default class Inicial extends Component {
   constructor(props) {
     super(props);
     //this.state = {isLoading: true}
+  }
+  isLogged = async () => {
+    console.log(await AsyncStorage.getAllKeys());
+    const token = await AsyncStorage.getItem('@CodeApi:token');
+    if (token) {
+      this.props.navigation.navigate('MainPage');
+    }
+  };
+
+  componentDidMount() {
+    console.log('DidMount');
+    this.isLogged();
   }
 
   render() {

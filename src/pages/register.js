@@ -113,23 +113,6 @@ export default class Register extends Component {
     }
   };
 
-  preencherCampos() {
-    this.setState({
-      email: 'amaurymagalhaesf22@gmail.com',
-      cpf: '03870114207',
-      name: 'Amaury',
-      surname: 'Magalhães',
-      username: 'amaury22',
-      password: '30af9871020',
-      phone: '991403987',
-      birthdate: '03-11-1998',
-    });
-  }
-
-  componentDidMount() {
-    this.preencherCampos();
-  }
-
   render() {
     return (
       <View style={{backgroundColor: '#052623', flex: 1}}>

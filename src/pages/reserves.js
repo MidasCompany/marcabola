@@ -8,6 +8,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  AsyncStorage,
 } from 'react-native';
 import {CalendarList, LocaleConfig} from 'react-native-calendars';
 
@@ -45,6 +46,19 @@ export default class Reserves extends Component {
     );
     console.log(this.state.markedDates);
   };
+
+  isLogged = async () => {
+    const token = await AsyncStorage.getItem('@CodeApi:token');
+    if (!token) {
+      this.props.navigation.navigate('LoginPage');
+    }
+  };
+  componentDidUpdate() {
+    this.isLogged();
+  }
+  componentDidMount() {
+    this.isLogged();
+  }
 
   render() {
     return (

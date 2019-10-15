@@ -1,8 +1,14 @@
-/* eslint-disable react-native/no-inline-styles */
-/* eslint-disable no-unused-vars */
 import React, {Component} from 'react';
 
-import {View, Image, StyleSheet, TouchableOpacity, Text} from 'react-native';
+import {
+  View,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  Text,
+  AsyncStorage,
+} from 'react-native';
 
 import {
   widthPercentageToDP as wp,
@@ -17,22 +23,32 @@ import TeamIcon from '../../assets/team.png';
 import MenuIcon from '../../assets/menubutton.png';
 
 export default class Main extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  logOut = async () => {
+    console.log('Deslogando');
+    await AsyncStorage.clear();
+    this.isLogged();
+  };
+
+  isLogged = async () => {
+    const token = await AsyncStorage.getItem('@CodeApi:token');
+    if (!token) {
+      this.props.navigation.navigate('LoginPage');
+    }
+  };
+  componentDidUpdate() {
+    this.isLogged();
+  }
+  componentDidMount() {
+    this.isLogged();
+  }
+
   render() {
     return (
       <View style={styles.background}>
-        <TouchableOpacity
-          style={{
-            alignSelf: 'flex-start',
-            margin: '4%',
-            marginBottom: '1%',
-            height: hp('6%'),
-            width: wp('8%'),
-          }}>
-          <Image
-            source={MenuIcon}
-            style={{height: '100%', width: '100%', resizeMode: 'stretch'}}
-          />
-        </TouchableOpacity>
         <TouchableOpacity
           onPress={() => this.props.navigation.navigate('ArenasPage')}
           style={styles.roundedbox_arenas}>
@@ -43,14 +59,18 @@ export default class Main extends Component {
           style={styles.roundedbox_check}>
           <Text style={styles.text}>Bolas marcadas</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.roundedbox_history}>
-          <Text style={styles.text}>Histórico</Text>
+        <TouchableOpacity
+          onPress={() => this.props.navigation.navigate('ProfilePage')}
+          style={styles.roundedbox_history}>
+          <Text style={styles.text}>Perfil</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.roundedbox_teams}>
-          <Text style={styles.text}>Time</Text>
+        <TouchableOpacity
+          onPress={() => this.props.navigation.navigate('FAQPage')}
+          style={styles.roundedbox_teams}>
+          <Text style={styles.text}>Ajuda</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.roundedbox_plane}>
-          <Text style={styles.text}>Convidar</Text>
+        <TouchableOpacity onPress={this.logOut} style={styles.roundedbox_plane}>
+          <Text style={styles.text}>Sair</Text>
         </TouchableOpacity>
       </View>
     );
@@ -62,6 +82,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#052623',
     flex: 1,
     alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: '1%',
   },
   text: {
     color: '#DAF6E7',

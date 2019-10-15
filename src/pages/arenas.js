@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   Text,
-  ScrollView,
   AsyncStorage,
   FlatList,
   SafeAreaView,
@@ -45,7 +44,17 @@ export default class Arenas extends Component {
     }
   };
 
+  isLogged = async () => {
+    const token = await AsyncStorage.getItem('@CodeApi:token');
+    if (!token) {
+      this.props.navigation.navigate('LoginPage');
+    }
+  };
+  componentDidUpdate() {
+    this.isLogged();
+  }
   componentDidMount() {
+    this.isLogged();
     this.listArenas();
   }
 

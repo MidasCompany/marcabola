@@ -1,19 +1,91 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 
-import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  AsyncStorage,
+} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
+import moment from 'moment';
+import 'moment/min/locales';
+
+import api from '../services/api';
+
 import BackButton from '../../assets/leftarrow.png';
-// import { Container } from './styles';
 
 export default class Profile extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: null,
+      surname: null,
+      email: null,
+      cpf: null,
+      phone: null,
+      birthdate: null,
+      username: null,
+    };
+  }
+  isLogged = async () => {
+    const token = await AsyncStorage.getItem('@CodeApi:token');
+    if (!token) {
+      this.props.navigation.navigate('LoginPage');
+    }
+  };
+
+  listData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('@CodeApi:token');
+      const infos = await api.get('/api/user', null, {
+        headers: {Authorization: `BEARER ${token}`},
+      });
+      moment.locale('pt-br');
+      infos.data.birthdate = moment().format('LL');
+      this.setState({
+        name: infos.data.name,
+        surname: infos.data.surname,
+        email: infos.data.email,
+        cpf: infos.data.cpf,
+        phone: infos.data.phone,
+        birthdate: infos.data.birthdate,
+        username: infos.data.username,
+      });
+    } catch (response) {
+      console.log('Erro: ', response);
+    }
+  };
+
+  isLogged = async () => {
+    const token = await AsyncStorage.getItem('@CodeApi:token');
+    if (!token) {
+      this.props.navigation.navigate('LoginPage');
+    }
+  };
+  componentDidUpdate() {
+    this.isLogged();
+  }
+  componentDidMount() {
+    this.isLogged();
+  }
+
+  UNSAFE_componentWillMount() {
+    this.listData();
+  }
+
   render() {
     return (
       <View style={{backgroundColor: '#052623', flex: 1}}>
         <TouchableOpacity
+          onPress={() => this.props.navigation.goBack()}
           style={{height: hp('10%'), width: wp('20%'), margin: wp('3%')}}>
           <Image
             source={BackButton}
@@ -40,40 +112,41 @@ export default class Profile extends Component {
             height: hp('100%'),
             justifyContent: 'center',
           }}>
-          <View style={{marginBottom: wp('3%'), marginTop: wp('3%')}}>
-            <Text style={styles.proptext}>Nome</Text>
-            <Text style={styles.usertext}>Donquixote</Text>
-          </View>
+          <ScrollView>
+            <View style={{marginBottom: wp('3%'), marginTop: wp('3%')}}>
+              <Text style={styles.userTitle}>@{this.state.username}</Text>
+            </View>
 
-          <View style={{marginBottom: wp('3%'), marginTop: wp('3%')}}>
-            <Text style={styles.proptext}>Sobrenome</Text>
-            <Text style={styles.usertext}>Donflamingo</Text>
-          </View>
+            <View style={{marginBottom: wp('3%'), marginTop: wp('3%')}}>
+              <Text style={styles.proptext}>Nome</Text>
+              <Text style={styles.usertext}>{this.state.name}</Text>
+            </View>
 
-          <View style={{marginBottom: wp('3%'), marginTop: wp('3%')}}>
-            <Text style={styles.proptext}>E-mail</Text>
-            <Text style={styles.usertext}>doflamingo@gmail.com</Text>
-          </View>
+            <View style={{marginBottom: wp('3%'), marginTop: wp('3%')}}>
+              <Text style={styles.proptext}>Sobrenome</Text>
+              <Text style={styles.usertext}>{this.state.surname}</Text>
+            </View>
 
-          <View style={{marginBottom: wp('3%'), marginTop: wp('3%')}}>
-            <Text style={styles.proptext}>Data de nascimento</Text>
-            <Text style={styles.usertext}>11/03/1990</Text>
-          </View>
+            <View style={{marginBottom: wp('3%'), marginTop: wp('3%')}}>
+              <Text style={styles.proptext}>Telefone</Text>
+              <Text style={styles.usertext}>{this.state.phone}</Text>
+            </View>
 
-          <View style={{marginBottom: wp('3%'), marginTop: wp('3%')}}>
-            <Text style={styles.proptext}>CPF</Text>
-            <Text style={styles.usertext}>182.321.123-69</Text>
-          </View>
+            <View style={{marginBottom: wp('3%'), marginTop: wp('3%')}}>
+              <Text style={styles.proptext}>E-mail</Text>
+              <Text style={styles.usertext}>{this.state.email}</Text>
+            </View>
 
-          <TouchableOpacity
-            style={{
-              backgroundColor: '#052623',
-              alignSelf: 'center',
-              padding: wp('5%'),
-              borderRadius: wp('100%'),
-            }}>
-            <Text style={styles.passwordtext}>Mudar senha</Text>
-          </TouchableOpacity>
+            <View style={{marginBottom: wp('3%'), marginTop: wp('3%')}}>
+              <Text style={styles.proptext}>Data de nascimento</Text>
+              <Text style={styles.usertext}>{this.state.birthdate}</Text>
+            </View>
+
+            <View style={{marginBottom: wp('3%'), marginTop: wp('3%')}}>
+              <Text style={styles.proptext}>CPF</Text>
+              <Text style={styles.usertext}>{this.state.cpf}</Text>
+            </View>
+          </ScrollView>
         </View>
       </View>
     );
@@ -88,6 +161,11 @@ const styles = StyleSheet.create({
   usertext: {
     color: '#FFFFFF',
     fontSize: hp('3%'),
+  },
+  userTitle: {
+    color: '#FFFFFF',
+    fontSize: hp('4%'),
+    textAlign: 'center',
   },
   passwordtext: {
     color: '#FFFFFF',
