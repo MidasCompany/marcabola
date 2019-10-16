@@ -37,7 +37,7 @@ export default class Arenas extends Component {
         headers: {Authorization: `BEARER ${token}`},
       });
       this.setState({
-        arenas: list.data,
+        arenas: list.data.sort((a, b) => a.name - b.name),
       });
       console.log('Arenas: ', this.state.arenas);
     } catch (response) {
@@ -69,7 +69,7 @@ export default class Arenas extends Component {
         </TouchableOpacity>
         <Text
           style={{
-            color: '#C004D9',
+            color: '#4F0259',
             alignSelf: 'center',
             textAlign: 'center',
             fontSize: hp('4%'),
@@ -108,7 +108,11 @@ export default class Arenas extends Component {
                   </View>
                   <View>
                     <Text style={styles.textname}>{item.name}</Text>
-                    <Text style={styles.textprops}>$$$ 1km</Text>
+                    <Text style={styles.textprops}>
+                      R${item.price.morning} - R$
+                      {item.price.evening} - R$
+                      {item.price.night}
+                    </Text>
                   </View>
                 </TouchableOpacity>
               )}

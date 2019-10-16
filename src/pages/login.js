@@ -47,7 +47,6 @@ export default class Login extends Component {
           ['@CodeApi:user', JSON.stringify(user)],
         ]);
 
-        Alert.alert('Login feito com sucesso');
         this.props.navigation.navigate('MainPage');
       } catch (response) {
         Alert.alert('Login não efetuado.', response.data.message);
@@ -63,7 +62,7 @@ export default class Login extends Component {
         <>
           {!!this.state.errorMessage && <Text>{this.state.errorMessage}</Text>}
           <TouchableOpacity
-            onPress={() => this.props.navigation.goBack()}
+            onPress={() => this.props.navigation.navigate('InicialPage')}
             style={{margin: wp('5%')}}>
             <Text style={{color: '#36D25C', fontSize: hp('5%')}}>X</Text>
           </TouchableOpacity>

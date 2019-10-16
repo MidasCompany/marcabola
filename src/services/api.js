@@ -3,7 +3,7 @@ import {create} from 'apisauce';
 const tokens = {};
 
 const api = create({
-  baseURL: 'http://192.168.0.3:8080/',
+  baseURL: 'http://10.20.17.42:8080/',
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',

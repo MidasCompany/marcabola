@@ -16,6 +16,9 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import {format, parseISO, addHours, setHours} from 'date-fns';
+import ptBR from 'date-fns/locale/pt-BR';
+import api from '../services/api';
 
 import LeftArrow from '../../assets/leftarrow.png';
 
@@ -24,7 +27,6 @@ import xMarkTransparent from '../../assets/xMarkTransparent.png';
 import warningTransparent from '../../assets/warningTransparent.png';
 
 import checkTransparent from '../../assets/checkTransparent.png';
-import api from '../services/api';
 
 export default class Reserves extends Component {
   constructor(props) {
@@ -33,6 +35,7 @@ export default class Reserves extends Component {
       today: new Date(),
       dateSelected: null,
       reserves: [],
+      reserves_formated: [],
     };
   }
 
@@ -61,6 +64,13 @@ export default class Reserves extends Component {
     } catch (response) {
       console.log(response);
     }
+  };
+  formatItem = _day => {
+    const day = parseISO(_day);
+    const formatedDate = format(day, "dd 'de' MMMM' de 'yyyy', às 'HH:mm", {
+      locale: ptBR,
+    });
+    return formatedDate;
   };
 
   componentDidUpdate() {
@@ -95,10 +105,10 @@ export default class Reserves extends Component {
                     />
                   </View>
                   <View>
-                    <Text style={styles.boxReserveTitle}>
-                      Futebol dos bacanas
+                    <Text style={styles.boxReserveTitle}>Bola confirmada</Text>
+                    <Text style={styles.boxReserveHour}>
+                      {this.formatItem(item.date_start)}
                     </Text>
-                    <Text style={styles.boxReserveHour}>{item.date_start}</Text>
                   </View>
                 </View>
               )}

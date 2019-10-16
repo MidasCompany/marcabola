@@ -1,7 +1,14 @@
 /* eslint-disable no-undef */
 import React, {Component} from 'react';
 
-import {View, StyleSheet, Text, Image, TouchableOpacity} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 import {format, parseISO, addHours, setHours} from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
@@ -41,23 +48,27 @@ export default class Arena extends Component {
       timeStart: null,
       availableTime: null,
       totalToShow: null,
-      morning: ['06:00'],
-      evening: ['13:00'],
-      night: ['18:00'],
+      morning: null,
+      evening: null,
+      night: null,
     };
   }
 
   fillAvailableTime = (evening, morning, night) => {
     const aArray = [];
-    const allArrays = aArray.concat(evening, morning, night);
+    const allArrays = aArray.concat(morning, evening, night);
     this.setState({
       availableTime: allArrays,
     });
   };
 
-  formatDays = day => {
-    this.setState({dateSelected: day.dateString});
-    const _date = parseISO(day.dateString);
+  formatDays = _day => {
+    console.log(_day);
+    this.setState({dateSelected: _day.dateString}, () =>
+      console.log(this.state.dateSelected),
+    );
+    console.log(this.state.dateSelected);
+    const _date = parseISO(_day.dateString);
     const formatedDate = format(_date, "dd 'de' MMMM' de 'yyyy'", {
       locale: ptBR,
     });
@@ -78,6 +89,9 @@ export default class Arena extends Component {
         scrollEnabled={true}
         showScrollIndicator={true}
         onDayPress={day => {
+          this.formatDays(day);
+        }}
+        onDayLongPress={day => {
           this.formatDays(day);
         }}
         markedDates={{
@@ -115,15 +129,15 @@ export default class Arena extends Component {
     console.log(price);
     if (schedule.evening.find(element => element === selectedH)) {
       console.log('evening');
-      this.setState({totalToPay: price.evening * this.state.totalHours});
+      this.setState({totalToPay: price.evening * hours});
     }
     if (schedule.morning.find(element => element === selectedH)) {
       console.log('morning');
-      this.setState({totalToPay: price.morning * this.state.totalHours});
+      this.setState({totalToPay: price.morning * hours});
     }
     if (schedule.night.find(element => element === selectedH)) {
       console.log('night');
-      this.setState({totalToPay: price.night * this.state.totalHours});
+      this.setState({totalToPay: price.night * hours});
     }
   };
 
@@ -147,6 +161,12 @@ export default class Arena extends Component {
         },
       );
       console.log(response);
+      Alert.alert('Parabéns, você conseguiu marcar sua bola', null, [
+        {
+          text: 'Valeu. ;)',
+          onPress: () => this.props.navigation.navigate('ReservesPage'),
+        },
+      ]);
     } catch (response) {
       console.log(response);
     }

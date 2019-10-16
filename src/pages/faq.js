@@ -22,6 +22,7 @@ export default class FAQ extends Component {
     return (
       <View style={{backgroundColor: '#176337', flex: 1}}>
         <TouchableOpacity
+          onPress={() => this.props.navigation.goBack()}
           style={{height: hp('10%'), width: wp('15%'), margin: wp('3%')}}>
           <Image
             source={MenuButton}
@@ -41,37 +42,9 @@ export default class FAQ extends Component {
         </Text>
 
         <ScrollView>
-          <TouchableOpacity style={styles.backgroundQuestion}>
-            <Text style={styles.textQuestion}>
-              Minha bola foi cancelada, o que faço?
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.backgroundQuestion}>
-            <Text style={styles.textQuestion}>
-              Minha bola foi cancelada, o que faço?
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.backgroundQuestion}>
-            <Text style={styles.textQuestion}>
-              Minha bola foi cancelada, o que faço?
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.backgroundQuestion}>
-            <Text style={styles.textQuestion}>
-              Minha bola foi cancelada, o que faço?
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.backgroundQuestion}>
-            <Text style={styles.textQuestion}>
-              Minha bola foi cancelada, o que faço?
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.backgroundQuestion}>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('QuestionPage')}
+            style={styles.backgroundQuestion}>
             <Text style={styles.textQuestion}>
               Minha bola foi cancelada, o que faço?
             </Text>
