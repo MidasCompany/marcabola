@@ -90,7 +90,9 @@ export default class Arenas extends Component {
               data={this.state.arenas}
               renderItem={({item}) => (
                 <TouchableOpacity
-                  onPress={() => this.props.navigation.push('ArenaPage')}
+                  onPress={() =>
+                    this.props.navigation.push('ArenaPage', {name: item.name})
+                  }
                   style={styles.boxarenas}>
                   <View>
                     <View

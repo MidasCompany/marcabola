@@ -15,6 +15,7 @@ import Reserves from './pages/reserves';
 const Routes = createAppContainer(
   createStackNavigator(
     {
+      ArenasPage: Arenas,
       ArenaPage: Arena,
       InicialPage: Inicial,
       RegisterPage: Register,
@@ -22,7 +23,6 @@ const Routes = createAppContainer(
       MainPage: Main,
       ProfilePage: Profile,
       ReservesPage: Reserves,
-      ArenasPage: Arenas,
       QuestionPage: Question,
       FAQPage: FAQ,
     },
