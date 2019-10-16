@@ -30,7 +30,6 @@ export default class Arenas extends Component {
     };
   }
   listArenas = async () => {
-    console.log('Arenas: ', this.state.arenas);
     try {
       const token = await AsyncStorage.getItem('@CodeApi:token');
       console.log('app', token);
@@ -91,7 +90,10 @@ export default class Arenas extends Component {
               renderItem={({item}) => (
                 <TouchableOpacity
                   onPress={() =>
-                    this.props.navigation.push('ArenaPage', {name: item.name})
+                    this.props.navigation.push('ArenaPage', {
+                      name: item.name,
+                      arena_id: item.id,
+                    })
                   }
                   style={styles.boxarenas}>
                   <View>

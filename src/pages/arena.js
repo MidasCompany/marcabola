@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 
 import {View, StyleSheet, Text, Image, TouchableOpacity} from 'react-native';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
-import {format, parseISO, addHours, subHours} from 'date-fns';
+import {format, parseISO, addHours, setHours} from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 
 import ModalDropdown from 'react-native-modal-dropdown';
@@ -14,6 +14,8 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+
+import api from '../services/api';
 
 import xMark from '../../assets/xmark.png';
 
@@ -39,34 +41,27 @@ export default class Arena extends Component {
       timeStart: null,
       availableTime: null,
       totalToShow: null,
-      morning: ['06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00'],
-      evening: ['13:00', '14:00', '15:00', '16:00', '17:00'],
-      night: ['18:00', '19:00', '20:00', '21:00', '22:00', '23:00'],
+      morning: ['06:00'],
+      evening: ['13:00'],
+      night: ['18:00'],
     };
   }
 
-  fillAvailableTime = () => {
+  fillAvailableTime = (evening, morning, night) => {
     const aArray = [];
-    const allArrays = aArray.concat(
-      this.state.evening,
-      this.state.morning,
-      this.state.night,
-    );
+    const allArrays = aArray.concat(evening, morning, night);
     this.setState({
       availableTime: allArrays,
     });
   };
 
-  checkPrice = day => {
+  formatDays = day => {
     this.setState({dateSelected: day.dateString});
     const _date = parseISO(day.dateString);
     const formatedDate = format(_date, "dd 'de' MMMM' de 'yyyy'", {
       locale: ptBR,
     });
-    const date = this.state.dateSelected;
-    const price = 10;
     this.setState({
-      totalToPay: price,
       dateSelectedFormated: formatedDate,
     });
   };
@@ -83,7 +78,7 @@ export default class Arena extends Component {
         scrollEnabled={true}
         showScrollIndicator={true}
         onDayPress={day => {
-          this.checkPrice(day);
+          this.formatDays(day);
         }}
         markedDates={{
           [this.state.dateSelected]: {selected: true},
@@ -94,13 +89,67 @@ export default class Arena extends Component {
   };
   handleWithDropdown = hour => {
     this.setState({timeStart: hour, totalHours: 1});
+    this.handleWithPrice();
   };
-  handleWithHours = a => {
+  handleWithHours = async a => {
     const hours = this.state.totalHours;
     if ((hours == 1 && a < 1) || hours == 0 || !hours) {
       return;
     }
-    this.setState({totalHours: this.state.totalHours + a});
+    this.setState({totalHours: this.state.totalHours + a}, () => {
+      this.handleWithPrice();
+    });
+  };
+
+  handleWithPrice = async () => {
+    const arena_id = this.props.navigation.state.params.arena_id;
+    const token = await AsyncStorage.getItem('@CodeApi:token');
+    const infos = await api.get(`/api/arena/${arena_id}`, null, {
+      headers: {Authorization: `BEARER ${token}`},
+    });
+    const hours = this.state.totalHours;
+
+    const price = infos.data.price;
+    const schedule = infos.data.schedule;
+    const selectedH = this.state.timeStart;
+    console.log(price);
+    if (schedule.evening.find(element => element === selectedH)) {
+      console.log('evening');
+      this.setState({totalToPay: price.evening * this.state.totalHours});
+    }
+    if (schedule.morning.find(element => element === selectedH)) {
+      console.log('morning');
+      this.setState({totalToPay: price.morning * this.state.totalHours});
+    }
+    if (schedule.night.find(element => element === selectedH)) {
+      console.log('night');
+      this.setState({totalToPay: price.night * this.state.totalHours});
+    }
+  };
+
+  sendReserve = async () => {
+    try {
+      const arena_id = this.props.navigation.state.params.arena_id;
+      const token = await AsyncStorage.getItem('@CodeApi:token');
+      const _date = parseISO(this.state.dateSelected);
+      const timeStart = parseInt(this.state.timeStart, 10);
+      const _datetime = setHours(_date, timeStart);
+      console.log(_datetime);
+      const response = await api.post(
+        'api/reservations',
+        {
+          arena_id: arena_id,
+          date_start: _datetime,
+          total_hours: this.state.totalHours,
+        },
+        {
+          headers: {Authorization: `BEARER ${token}`},
+        },
+      );
+      console.log(response);
+    } catch (response) {
+      console.log(response);
+    }
   };
 
   showDropDown = () => {
@@ -127,12 +176,35 @@ export default class Arena extends Component {
         </View>
         <View style={styles.middleInferiorDivisor} />
         <View style={{justifyContent: 'center', marginLeft: wp('-10%')}}>
-          <TouchableOpacity style={styles.confirmBackground}>
+          <TouchableOpacity
+            onPress={() => this.sendReserve()}
+            style={styles.confirmBackground}>
             <Text style={styles.confirmText}>Marcar</Text>
           </TouchableOpacity>
         </View>
       </View>
     );
+  };
+
+  listArenaData = async () => {
+    try {
+      const arena_id = this.props.navigation.state.params.arena_id;
+      const token = await AsyncStorage.getItem('@CodeApi:token');
+      const infos = await api.get(`/api/arena/${arena_id}`, null, {
+        headers: {Authorization: `BEARER ${token}`},
+      });
+      const schedule = infos.data.schedule;
+      console.log(schedule);
+
+      this.fillAvailableTime(
+        schedule.evening,
+        schedule.morning,
+        schedule.night,
+      );
+    } catch (response) {
+      console.log('Erro: ', response);
+      this.isLogged();
+    }
   };
 
   showManyHours = () => {
@@ -184,7 +256,7 @@ export default class Arena extends Component {
   componentDidMount() {
     this.isLogged();
     this.fillAvailableTime();
-    console.log(this.props.navigation.state.params.name);
+    this.listArenaData();
   }
 
   render() {
