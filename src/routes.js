@@ -15,16 +15,16 @@ import Reserves from './pages/reserves';
 const Routes = createAppContainer(
   createStackNavigator(
     {
+      ArenaPage: Arena,
       InicialPage: Inicial,
       RegisterPage: Register,
       LoginPage: Login,
       MainPage: Main,
+      ProfilePage: Profile,
       ReservesPage: Reserves,
-      ArenaPage: Arena,
       ArenasPage: Arenas,
       QuestionPage: Question,
       FAQPage: FAQ,
-      ProfilePage: Profile,
     },
     {
       defaultNavigationOptions: {

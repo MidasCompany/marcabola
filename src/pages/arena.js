@@ -8,9 +8,12 @@ import {
   Button,
   Image,
   TouchableOpacity,
-  AsyncStorage,
 } from 'react-native';
-import {CalendarList, LocaleConfig} from 'react-native-calendars';
+import {Calendar, LocaleConfig} from 'react-native-calendars';
+import {format, parseISO, addMonths, subMonths} from 'date-fns';
+import ptBR from 'date-fns/locale/pt-BR';
+
+import AsyncStorage from '@react-native-community/async-storage';
 
 import {
   widthPercentageToDP as wp,
@@ -25,52 +28,49 @@ import Placeholder from '../../assets/greenplaceholder.png';
 
 import Coin from '../../assets/greencoin.png';
 
-import moment from 'moment';
-
 export default class Arena extends Component {
   constructor(props) {
     super(props);
-    const DISABLED_DAYS = ['Sábado', 'Domingo'];
     this.state = {
       today: new Date(),
       dateSelected: null,
-      markedDates: this.getDaysInMonth(
-        moment().month(),
-        moment().year(),
-        DISABLED_DAYS,
-      ),
+      totalToPay: 0,
+      currentDate: new Date(),
     };
   }
 
-  selectionData = _day => {
-    this.setState(
-      (this.state.dateSelected = {
-        [_day.dateString]: {selected: true, selectedColor: '#7C038C'},
-      }),
-    );
+  checkPrice = day => {
+    this.setState({dateSelected: day.dateString});
+    const date = this.state.dateSelected;
+    const price = 10;
+    this.setState({
+      totalToPay: price,
+    });
   };
 
-  getDaysInMonth(month, year, days) {
-    let pivot = moment()
-      .month(month)
-      .year(year)
-      .startOf('month');
-    const end = moment()
-      .month(month)
-      .year(year)
-      .endOf('month');
-
-    let dates = {};
-    const disabled = {disabled: true, disableTouchEvent: false};
-    while (pivot.isBefore(end)) {
-      days.forEach(day => {
-        dates[pivot.day(day).format('YYYY-MM-DD')] = disabled;
-      });
-      pivot.add(7, 'days');
-    }
-
-    return dates;
-  }
+  showCalendar = () => {
+    return (
+      <Calendar
+        minDate={this.state.today}
+        onMonthChange={console.log(this.state)}
+        onVisibleMonthsChange={months => {
+          console.log('month', months[0].month);
+        }}
+        onPressArrowLeft={substractMonth => substractMonth()}
+        onPressArrowRight={addMonth => addMonth()}
+        scrollEnabled={true}
+        showScrollIndicator={true}
+        onDayPress={day => {
+          this.checkPrice(day);
+        }}
+        markedDates={{
+          '2019-10-25': {disabled: true, disableTouchEvent: true},
+          [this.state.dateSelected]: {selected: true},
+        }}
+        style={styles.calendar}
+      />
+    );
+  };
 
   isLogged = async () => {
     const token = await AsyncStorage.getItem('@CodeApi:token');
@@ -78,6 +78,7 @@ export default class Arena extends Component {
       this.props.navigation.navigate('LoginPage');
     }
   };
+
   componentDidUpdate() {
     this.isLogged();
   }
@@ -103,7 +104,7 @@ export default class Arena extends Component {
               style={{
                 flexDirection: 'row',
                 alignSelf: 'center',
-                margin: hp('1%'),
+                margin: hp('0.1%'),
               }}>
               <Image source={Star} style={styles.imageArenaProps} />
               <Text style={styles.textArenaProps}>5,0</Text>
@@ -113,65 +114,41 @@ export default class Arena extends Component {
               <Text style={styles.textArenaProps}>1 km</Text>
             </View>
           </View>
-
-          <View style={styles.middleItems}>
-            <CalendarList
-              onDayPress={day => {
-                console.log('selected day', day);
-              }}
-              pastScrollRange={0}
-              minDate={this.state.today}
-              futureScrollRange={3}
-              scrollEnabled={true}
-              onMonthChange={date => {
-                this.setState({
-                  markedDates: this.getDaysInMonth(
-                    date.month - 1,
-                    date.year,
-                    DISABLED_DAYS,
-                  ),
-                });
-              }}
-              showScrollIndicator={true}
-              onDayPress={day => {
-                this.selectionData(day);
-              }}
-              onDayLongPress={day => {
-                this.selectionData(day);
-              }}
-              //disabledByDefault
-              theme={{
-                calendarBackground: '#07A24A',
-                textSectionTitleColor: '#7C038C',
-                monthTextColor: 'white',
-                textMonthFontSize: hp('2.5%'),
-                dotColor: '#00adf5',
-                selectedDotColor: '#000000',
-                dayTextColor: 'white',
-                todayTextColor: 'purple',
-                textDisabledColor: '#AAAAAA',
-              }}
-              markedDates={(this.state.dateSelected, this.state.markedDates)}
-            />
-          </View>
-
-          <View style={styles.inferiorItems}>
-            <View
-              style={{
-                flexDirection: 'column',
-                justifyContent: 'center',
-                marginLeft: wp('5%'),
-              }}>
-              <Text style={styles.textTotal}>Total</Text>
-              <Text style={styles.textMoneyTotal}>R$ 10</Text>
-            </View>
-            <View style={styles.middleInferiorDivisor} />
-            <View style={{justifyContent: 'center', marginLeft: wp('-10%')}}>
-              <TouchableOpacity style={styles.confirmBackground}>
-                <Text style={styles.confirmText}>Marcar</Text>
+          {this.state.dateSelected ? (
+            <View>
+              <TouchableOpacity
+                onPress={() => {
+                  this.setState({dateSelected: null});
+                }}
+                style={styles.confirmBackground}>
+                <Text style={styles.confirmText}>Escolher data de novo</Text>
               </TouchableOpacity>
+              <Text style={styles.confirmText}>{this.state.dateSelected}</Text>
             </View>
-          </View>
+          ) : (
+            this.showCalendar()
+          )}
+          {this.state.dateSelected ? (
+            <View style={styles.inferiorItems}>
+              <View
+                style={{
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  marginLeft: wp('5%'),
+                }}>
+                <Text style={styles.textTotal}>Total</Text>
+                <Text style={styles.textMoneyTotal}>
+                  R$ {this.state.totalToPay}
+                </Text>
+              </View>
+              <View style={styles.middleInferiorDivisor} />
+              <View style={{justifyContent: 'center', marginLeft: wp('-10%')}}>
+                <TouchableOpacity style={styles.confirmBackground}>
+                  <Text style={styles.confirmText}>Marcar</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          ) : null}
         </View>
       </View>
     );
@@ -182,6 +159,10 @@ const styles = StyleSheet.create({
   background: {
     backgroundColor: '#4F0259',
     flex: 1,
+  },
+  calendar: {
+    marginVertical: '5%',
+    marginBottom: '10%',
   },
   xMarkBox: {
     height: hp('10%'),
@@ -234,7 +215,6 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   allItems: {
-    justifyContent: 'space-between',
     flex: 3,
   },
   middleItems: {
@@ -280,6 +260,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
 LocaleConfig.locales['br'] = {
   monthNames: [
     'Janeiro',

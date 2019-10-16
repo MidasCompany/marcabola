@@ -8,10 +8,9 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  AsyncStorage,
 } from 'react-native';
 import {CalendarList, LocaleConfig} from 'react-native-calendars';
-
+import AsyncStorage from '@react-native-community/async-storage';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -25,27 +24,14 @@ import warningTransparent from '../../assets/warningTransparent.png';
 
 import checkTransparent from '../../assets/checkTransparent.png';
 
-import moment from 'moment';
-
 export default class Reserves extends Component {
   constructor(props) {
     super(props);
-    const DISABLED_DAYS = ['Sábado', 'Domingo'];
     this.state = {
       today: new Date(),
       dateSelected: null,
     };
   }
-
-  selectionData = _day => {
-    console.log(this.state);
-    this.setState(
-      (this.state.dateSelected = {
-        [_day.dateString]: {selected: true, selectedColor: '#7C038C'},
-      }),
-    );
-    console.log(this.state.markedDates);
-  };
 
   isLogged = async () => {
     const token = await AsyncStorage.getItem('@CodeApi:token');
@@ -71,46 +57,6 @@ export default class Reserves extends Component {
         <Text style={styles.textTitle}>Bolas marcadas</Text>
 
         <View style={styles.backBox}>
-          <CalendarList
-            onDayPress={day => {
-              console.log('selected day', day);
-            }}
-            pastScrollRange={0}
-            minDate={this.state.today}
-            futureScrollRange={3}
-            scrollEnabled={true}
-            calendarWidth={wp('80%')}
-            onMonthChange={date => {
-              this.setState({
-                markedDates: this.getDaysInMonth(
-                  date.month - 1,
-                  date.year,
-                  DISABLED_DAYS,
-                ),
-              });
-            }}
-            showScrollIndicator={true}
-            onDayPress={day => {
-              this.selectionData(day);
-            }}
-            onDayLongPress={day => {
-              this.selectionData(day);
-            }}
-            theme={{
-              calendarBackground: '#07A24A',
-              textSectionTitleColor: '#7C038C',
-              monthTextColor: 'white',
-              textMonthFontSize: hp('2.5%'),
-              dotColor: '#00adf5',
-              selectedDotColor: '#000000',
-              dayTextColor: 'white',
-              todayTextColor: 'purple',
-              textDisabledColor: '#AAAAAA',
-            }}
-            style={styles.calendar}
-            markedDates={this.state.dateSelected}
-          />
-
           <ScrollView style={{flexDirection: 'column', marginTop: hp('1%')}}>
             <View style={{flexDirection: 'row', marginTop: hp('1%')}}>
               <View style={{width: '15%'}}>
@@ -257,11 +203,6 @@ const styles = StyleSheet.create({
     marginVertical: hp('1%'),
     fontSize: hp('3%'),
     textAlign: 'center',
-  },
-  calendar: {
-    height: '50%',
-    width: '100%',
-    marginTop: hp('3%'),
   },
   boxReserve: {
     width: '85%',

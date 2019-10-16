@@ -7,14 +7,16 @@ import {
   TouchableOpacity,
   StyleSheet,
   Text,
-  AsyncStorage,
   FlatList,
   SafeAreaView,
 } from 'react-native';
+
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+
+import AsyncStorage from '@react-native-community/async-storage';
 
 import BackButton from '../../assets/leftarrowpink.png';
 
@@ -106,7 +108,7 @@ export default class Arenas extends Component {
                   </View>
                 </TouchableOpacity>
               )}
-              keyExtractor={item => item.id}
+              keyExtractor={item => `key-${item.id}`}
             />
           </SafeAreaView>
         </View>

@@ -8,15 +8,15 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  AsyncStorage,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
-import moment from 'moment';
-import 'moment/min/locales';
+import AsyncStorage from '@react-native-community/async-storage';
+import {format, parseISO} from 'date-fns';
+import ptBR from 'date-fns/locale/pt-BR';
 
 import api from '../services/api';
 
@@ -37,6 +37,7 @@ export default class Profile extends Component {
   }
   isLogged = async () => {
     const token = await AsyncStorage.getItem('@CodeApi:token');
+    console.log(token);
     if (!token) {
       this.props.navigation.navigate('LoginPage');
     }
@@ -48,19 +49,22 @@ export default class Profile extends Component {
       const infos = await api.get('/api/user', null, {
         headers: {Authorization: `BEARER ${token}`},
       });
-      moment.locale('pt-br');
-      infos.data.birthdate = moment().format('LL');
+      const date = parseISO(infos.data.birthdate);
+      const formateddate = format(date, "dd 'de' MMMM' de 'yyyy'", {
+        locale: ptBR,
+      });
       this.setState({
         name: infos.data.name,
         surname: infos.data.surname,
         email: infos.data.email,
         cpf: infos.data.cpf,
         phone: infos.data.phone,
-        birthdate: infos.data.birthdate,
+        birthdate: formateddate,
         username: infos.data.username,
       });
     } catch (response) {
       console.log('Erro: ', response);
+      this.isLogged();
     }
   };
 
@@ -70,9 +74,11 @@ export default class Profile extends Component {
       this.props.navigation.navigate('LoginPage');
     }
   };
+
   componentDidUpdate() {
     this.isLogged();
   }
+
   componentDidMount() {
     this.isLogged();
   }

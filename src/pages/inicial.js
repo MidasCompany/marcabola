@@ -1,18 +1,13 @@
 import React, {Component} from 'react';
 
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  AsyncStorage,
-} from 'react-native';
+import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+
+import AsyncStorage from '@react-native-community/async-storage';
 
 import Logo from '../../assets/logocalendario.png';
 

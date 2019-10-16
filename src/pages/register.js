@@ -9,9 +9,8 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
-  AsyncStorage,
 } from 'react-native';
-
+import AsyncStorage from '@react-native-community/async-storage';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
