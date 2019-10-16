@@ -1,17 +1,12 @@
 /* eslint-disable no-undef */
 import React, {Component} from 'react';
 
-import {
-  View,
-  StyleSheet,
-  Text,
-  Button,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
+import {View, StyleSheet, Text, Image, TouchableOpacity} from 'react-native';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 import {format, parseISO, addMonths, subMonths} from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
+
+import ModalDropdown from 'react-native-modal-dropdown';
 
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -28,6 +23,9 @@ import Placeholder from '../../assets/greenplaceholder.png';
 
 import Coin from '../../assets/greencoin.png';
 
+import Negative from '../../assets/negative.png';
+import Plus from '../../assets/plus.png';
+
 export default class Arena extends Component {
   constructor(props) {
     super(props);
@@ -35,9 +33,31 @@ export default class Arena extends Component {
       today: new Date(),
       dateSelected: null,
       totalToPay: 0,
+      totalHours: 0,
       currentDate: new Date(),
+      timeStart: null,
+      timeEnd: null,
+      availableTime: null,
+      morning: ['06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00'],
+      evening: ['13:00', '14:00', '15:00', '16:00', '17:00'],
+      night: ['18:00', '19:00', '20:00', '21:00', '22:00', '23:00'],
     };
   }
+
+  fillAvailableTime = () => {
+    const aArray = [];
+    const allArrays = aArray.concat(
+      this.state.evening,
+      this.state.morning,
+      this.state.night,
+    );
+    this.setState(
+      {
+        availableTime: allArrays,
+      },
+      () => console.log(this.state.availableTime),
+    );
+  };
 
   checkPrice = day => {
     this.setState({dateSelected: day.dateString});
@@ -64,12 +84,25 @@ export default class Arena extends Component {
           this.checkPrice(day);
         }}
         markedDates={{
-          '2019-10-25': {disabled: true, disableTouchEvent: true},
           [this.state.dateSelected]: {selected: true},
         }}
         style={styles.calendar}
       />
     );
+  };
+
+  handleWithHours = a => {
+    const hours = this.state.totalHours;
+    if (hours <= 1) {
+      return;
+    } else {
+      if (a == -1) {
+        this.setState({totalHours: this.state.totalHours - 1});
+      }
+      if (a == 1) {
+        this.setState({totalHours: this.state.totalHours + 1});
+      }
+    }
   };
 
   isLogged = async () => {
@@ -82,8 +115,10 @@ export default class Arena extends Component {
   componentDidUpdate() {
     this.isLogged();
   }
+
   componentDidMount() {
     this.isLogged();
+    this.fillAvailableTime();
   }
 
   render() {
@@ -125,9 +160,8 @@ export default class Arena extends Component {
               </TouchableOpacity>
               <Text style={styles.confirmText}>{this.state.dateSelected}</Text>
             </View>
-          ) : (
-            this.showCalendar()
-          )}
+          ) : //this.showCalendar()
+          null}
           {this.state.dateSelected ? (
             <View style={styles.inferiorItems}>
               <View
@@ -149,6 +183,49 @@ export default class Arena extends Component {
               </View>
             </View>
           ) : null}
+          <ModalDropdown
+            options={this.state.availableTime}
+            textStyle={{fontSize: 20, color: 'white'}}
+            dropdownTextStyle={{fontSize: 20}}
+            defaultValue="Escolha seu horário de início"
+            onSelect={(index, value) => console.log(value)}
+          />
+          <View>
+            <Text style={{fontSize: 20, color: 'white'}}>
+              Por quantas horas?
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                height: '40%',
+                width: '100%',
+                alignItems: 'center',
+              }}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.setState({totalHours: this.state.totalHours - 1});
+                }}
+                style={{height: '30%', width: '15%'}}>
+                <Image
+                  source={Negative}
+                  style={{height: '100%', width: '100%', resizeMode: 'center'}}
+                />
+              </TouchableOpacity>
+              <Text style={{fontSize: 25, color: 'white'}}>
+                {this.state.totalHours}
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  this.setState({totalHours: this.state.totalHours + 1});
+                }}
+                style={{height: '30%', width: '15%'}}>
+                <Image
+                  source={Plus}
+                  style={{height: '100%', width: '100%', resizeMode: 'center'}}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
       </View>
     );
