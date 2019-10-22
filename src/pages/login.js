@@ -9,6 +9,7 @@ import {
   TextInput,
   Alert,
   StyleSheet,
+  KeyboardAvoidingView,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {
@@ -58,7 +59,9 @@ export default class Login extends Component {
 
   render() {
     return (
-      <View style={{backgroundColor: '#052623', flex: 1}}>
+      <KeyboardAvoidingView
+        behavior="position"
+        style={{backgroundColor: '#052623', flex: 1}}>
         <>
           {!!this.state.errorMessage && <Text>{this.state.errorMessage}</Text>}
           <TouchableOpacity
@@ -82,57 +85,46 @@ export default class Login extends Component {
             <Image source={Logo} style={{width: '70%', height: '70%'}} />
           </View>
         </>
-        <View
+        <Text
+          style={{color: '#36D25C', fontSize: hp('5%'), textAlign: 'center'}}>
+          login
+        </Text>
+        <TextInput
+          placeholder="usuario"
+          onChangeText={username => this.setState({username})}
+          value={this.state.username}
+          placeholderTextColor="#36D25C"
+          style={style.textInputField}
+        />
+        <TextInput
+          placeholder="senha"
+          secureTextEntry={true}
+          onChangeText={password => this.setState({password})}
+          value={this.state.password}
+          placeholderTextColor="#36D25C"
+          style={style.textInputField}
+        />
+        <TouchableOpacity
+          onPress={this.logIn}
           style={{
-            justifyContent: 'center',
+            height: '20%',
+            width: '20%',
             alignSelf: 'center',
-            width: wp('90%'),
-            padding: wp('1%'),
-            borderColor: '#40A640',
-            borderWidth: 1,
-            borderRadius: wp('10%'),
+            margin: '5%',
+            marginBottom: 0,
           }}>
-          <Text
-            style={{color: '#36D25C', fontSize: hp('5%'), textAlign: 'center'}}>
-            login
-          </Text>
-          <TextInput
-            placeholder="usuario"
-            onChangeText={username => this.setState({username})}
-            value={this.state.username}
-            placeholderTextColor="#36D25C"
-            style={style.textInputField}
-          />
-          <TextInput
-            placeholder="senha"
-            secureTextEntry={true}
-            onChangeText={password => this.setState({password})}
-            value={this.state.password}
-            placeholderTextColor="#36D25C"
-            style={style.textInputField}
-          />
-          <TouchableOpacity
-            onPress={this.logIn}
+          <Image
+            source={Button}
             style={{
-              height: '20%',
-              width: '20%',
+              height: '100%',
+              width: '100%',
+              resizeMode: 'center',
+              justifyContent: 'center',
               alignSelf: 'center',
-              margin: '5%',
-              marginBottom: 0,
-            }}>
-            <Image
-              source={Button}
-              style={{
-                height: '100%',
-                width: '100%',
-                resizeMode: 'center',
-                justifyContent: 'center',
-                alignSelf: 'center',
-              }}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
+            }}
+          />
+        </TouchableOpacity>
+      </KeyboardAvoidingView>
     );
   }
 }

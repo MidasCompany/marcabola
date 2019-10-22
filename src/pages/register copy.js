@@ -33,7 +33,6 @@ export default class Register extends Component {
       birthdate: null,
       username: null,
       password: null,
-      startForm: true,
     };
   }
 
@@ -111,107 +110,13 @@ export default class Register extends Component {
     } catch (response) {
       console.log(response);
       Alert.alert(response.data.message);
-      Alert.alert(
-        'Não estamos conseguindo nos comunicar com nossos servidores :(',
-      );
     }
-  };
-
-  firstForm = () => {
-    return (
-      <View>
-        <TextInput
-          placeholder="nome"
-          placeholderTextColor="#36D25C"
-          style={styles.textfield}
-          onChangeText={name => this.setState({name})}
-          value={this.state.name}
-        />
-        <TextInput
-          placeholder="sobrenome"
-          placeholderTextColor="#36D25C"
-          style={styles.textfield}
-          onChangeText={surname => this.setState({surname})}
-          value={this.state.surname}
-        />
-        <TextInput
-          placeholder="e-mail"
-          placeholderTextColor="#36D25C"
-          style={styles.textfield}
-          onChangeText={email => this.setState({email})}
-          value={this.state.email}
-        />
-        <TextInput
-          placeholder="cpf"
-          placeholderTextColor="#36D25C"
-          style={styles.textfield}
-          onChangeText={cpf => this.setState({cpf})}
-          value={this.state.cpf}
-        />
-      </View>
-    );
-  };
-
-  secondForm = () => {
-    return (
-      <View>
-        <TextInput
-          placeholder="telefone"
-          placeholderTextColor="#36D25C"
-          style={styles.textfield}
-          onChangeText={phone => this.setState({phone})}
-          value={this.state.phone}
-        />
-        <TextInput
-          placeholder="data de nasc."
-          placeholderTextColor="#36D25C"
-          style={styles.textfield}
-          onChangeText={birthdate => this.setState({birthdate})}
-          value={this.state.birthdate}
-        />
-        <TextInput
-          placeholder="nome de usuario"
-          placeholderTextColor="#36D25C"
-          style={styles.textfield}
-          onChangeText={username => this.setState({username})}
-          value={this.state.username}
-        />
-        <TextInput
-          placeholder="senha"
-          placeholderTextColor="#36D25C"
-          style={styles.textfield}
-          onChangeText={password => this.setState({password})}
-          value={this.state.password}
-        />
-        <TouchableOpacity
-          onPress={this.register}
-          style={{
-            height: '20%',
-            width: '20%',
-            alignSelf: 'center',
-            margin: '3%',
-            marginBottom: 0,
-          }}>
-          <Image
-            source={Button}
-            style={{
-              height: '100%',
-              width: '100%',
-              resizeMode: 'center',
-              justifyContent: 'center',
-              alignSelf: 'center',
-            }}
-          />
-        </TouchableOpacity>
-      </View>
-    );
   };
 
   render() {
     return (
       <KeyboardAvoidingView
         behavior="position"
-        keyboardVerticalOffset={-90}
         style={{backgroundColor: '#052623', flex: 1}}>
         <TouchableOpacity
           onPress={() => this.props.navigation.goBack()}
@@ -232,47 +137,101 @@ export default class Register extends Component {
           }}>
           <Image source={Logo} style={{width: '70%', height: '70%'}} />
         </View>
-        <Text
+        <View
           style={{
-            color: '#36D25C',
-            fontSize: hp('3.5%'),
-            textAlign: 'center',
-            padding: '2%',
+            justifyContent: 'center',
+            alignSelf: 'center',
+            width: '90%',
+            height: '70%',
+            borderColor: 'white',
+            borderWidth: 1,
+            borderRadius: wp('10%'),
           }}>
-          Cadastro
-        </Text>
-        {this.state.startForm === true ? this.firstForm() : this.secondForm()}
-
-        <View>
-          {this.state.startForm === true ? (
-            <TouchableOpacity
-              onPress={() => {
-                this.setState({startForm: false});
-              }}>
-              <Text
-                style={{
-                  fontSize: wp('15%'),
-                  alignSelf: 'center',
-                  color: '#36D25C',
-                }}>
-                >
-              </Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              onPress={() => {
-                this.setState({startForm: true});
-              }}>
-              <Text
-                style={{
-                  fontSize: wp('15%'),
-                  alignSelf: 'center',
-                  color: '#36D25C',
-                }}>
-                {'<'}
-              </Text>
-            </TouchableOpacity>
-          )}
+          <Text
+            style={{
+              color: '#36D25C',
+              fontSize: hp('3.5%'),
+              textAlign: 'center',
+              padding: '2%',
+            }}>
+            Cadastro
+          </Text>
+          <TextInput
+            placeholder="nome"
+            placeholderTextColor="#36D25C"
+            style={styles.textfield}
+            onChangeText={name => this.setState({name})}
+            value={this.state.name}
+          />
+          <TextInput
+            placeholder="sobrenome"
+            placeholderTextColor="#36D25C"
+            style={styles.textfield}
+            onChangeText={surname => this.setState({surname})}
+            value={this.state.surname}
+          />
+          <TextInput
+            placeholder="e-mail"
+            placeholderTextColor="#36D25C"
+            style={styles.textfield}
+            onChangeText={email => this.setState({email})}
+            value={this.state.email}
+          />
+          <TextInput
+            placeholder="cpf"
+            placeholderTextColor="#36D25C"
+            style={styles.textfield}
+            onChangeText={cpf => this.setState({cpf})}
+            value={this.state.cpf}
+          />
+          <TextInput
+            placeholder="telefone"
+            placeholderTextColor="#36D25C"
+            style={styles.textfield}
+            onChangeText={phone => this.setState({phone})}
+            value={this.state.phone}
+          />
+          <TextInput
+            placeholder="data de nasc."
+            placeholderTextColor="#36D25C"
+            style={styles.textfield}
+            onChangeText={birthdate => this.setState({birthdate})}
+            value={this.state.birthdate}
+          />
+          <TextInput
+            placeholder="nome de usuario"
+            placeholderTextColor="#36D25C"
+            style={styles.textfield}
+            onChangeText={username => this.setState({username})}
+            value={this.state.username}
+          />
+          <TextInput
+            placeholder="senha"
+            placeholderTextColor="#36D25C"
+            style={styles.textfield}
+            onChangeText={password => this.setState({password})}
+            value={this.state.password}
+          />
+          <TouchableOpacity
+            onPress={this.register}
+            style={{
+              height: '20%',
+              width: '20%',
+              alignSelf: 'center',
+              margin: '3%',
+              marginBottom: 0,
+            }}>
+            <Image
+              source={Button}
+              style={{
+                height: '100%',
+                width: '100%',
+                resizeMode: 'center',
+                justifyContent: 'center',
+                alignSelf: 'center',
+              }}
+            />
+          </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
     );
