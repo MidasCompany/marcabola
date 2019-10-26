@@ -85,7 +85,7 @@ export default class Reserves extends Component {
     return (
       <View style={styles.background}>
         <TouchableOpacity
-          onPress={() => this.props.navigation.goBack()}
+          onPress={() => this.props.navigation.navigate('MainPage')}
           style={styles.leftArrowTouchable}>
           <Image source={LeftArrow} style={styles.leftArrowImage} />
         </TouchableOpacity>

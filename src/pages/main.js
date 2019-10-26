@@ -27,15 +27,18 @@ export default class Main extends Component {
   }
 
   logOut = async () => {
-    console.log('Deslogando');
     await AsyncStorage.clear();
-    this.isLogged();
+    //this.isLogged();
   };
 
   isLogged = async () => {
     const token = await AsyncStorage.getItem('@CodeApi:token');
     if (!token) {
-      this.props.navigation.navigate('LoginPage');
+      this.props.navigation.reset({
+        key: null,
+        index: 0,
+        actions: [this.props.navigation.navigate({routeName: 'LoginPage'})],
+      });
     }
   };
   componentDidUpdate() {

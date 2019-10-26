@@ -1,6 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-
 import {
   View,
   Text,
@@ -16,6 +15,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import Yup from 'yup';
 
 import Logo from '../../assets/logocalendario.png';
 import api from '../services/api';
@@ -44,9 +44,6 @@ export default class Register extends Component {
           username: this.state.username,
           password: this.state.password,
         });
-
-        console.log('Resposta', response);
-
         const {user, token} = response.data;
         await AsyncStorage.multiSet([
           ['@CodeApi:token', token],
@@ -55,7 +52,13 @@ export default class Register extends Component {
 
         this.props.navigation.navigate('MainPage');
       } catch (response) {
-        Alert.alert('Login não efetuado.', response.data.message);
+        if (!response.data) {
+          Alert.alert(
+            'Servidor está indisponível no momento, tente novamente mais tarde.',
+          );
+        } else {
+          Alert.alert('Login não efetuado.', response.data.message);
+        }
       }
     } else {
       Alert.alert('Preencha os campos, por favor.');

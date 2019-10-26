@@ -63,7 +63,7 @@ export default class Arenas extends Component {
     return (
       <View style={{backgroundColor: '#052623', flex: 1}}>
         <TouchableOpacity
-          onPress={() => this.props.navigation.goBack()}
+          onPress={() => this.props.navigation.navigate('MainPage')}
           style={styles.leftArrowTouchable}>
           <Image source={BackButton} style={styles.leftArrowImage} />
         </TouchableOpacity>
@@ -75,6 +75,7 @@ export default class Arenas extends Component {
             fontSize: hp('4%'),
             margin: wp('3%'),
             position: 'absolute',
+            fontWeight: 'bold',
           }}>
           Arenas
         </Text>

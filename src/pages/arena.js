@@ -163,7 +163,7 @@ export default class Arena extends Component {
       console.log(response);
       Alert.alert('Parabéns, você conseguiu marcar sua bola', null, [
         {
-          text: 'Valeu. ;)',
+          text: 'Valeu :)',
           onPress: () => this.props.navigation.navigate('ReservesPage'),
         },
       ]);
@@ -286,7 +286,7 @@ export default class Arena extends Component {
           <View style>
             <View style={styles.superiorItems}>
               <TouchableOpacity
-                onPress={() => this.props.navigation.goBack()}
+                onPress={() => this.props.navigation.navigate('ArenasPage')}
                 style={styles.xMarkBox}>
                 <Image source={xMark} style={styles.xMark} />
               </TouchableOpacity>

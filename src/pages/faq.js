@@ -22,7 +22,7 @@ export default class FAQ extends Component {
     return (
       <View style={{backgroundColor: '#176337', flex: 1}}>
         <TouchableOpacity
-          onPress={() => this.props.navigation.goBack()}
+          onPress={() => this.props.navigation.navigate('MainPage')}
           style={{height: hp('10%'), width: wp('15%'), margin: wp('3%')}}>
           <Image
             source={MenuButton}

@@ -91,7 +91,7 @@ export default class Profile extends Component {
     return (
       <View style={{backgroundColor: '#052623', flex: 1}}>
         <TouchableOpacity
-          onPress={() => this.props.navigation.goBack()}
+          onPress={() => this.props.navigation.navigate('MainPage')}
           style={{height: hp('10%'), width: wp('20%'), margin: wp('3%')}}>
           <Image
             source={BackButton}

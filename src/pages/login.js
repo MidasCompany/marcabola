@@ -10,6 +10,7 @@ import {
   Alert,
   StyleSheet,
   KeyboardAvoidingView,
+  Keyboard,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {
@@ -33,15 +34,13 @@ export default class Login extends Component {
   }
 
   logIn = async () => {
+    Keyboard.dismiss();
     if (this.state.username && this.state.password) {
       try {
         const response = await api.post('api/sessions', {
           username: this.state.username,
           password: this.state.password,
         });
-
-        console.log('Resposta', response);
-
         const {user, token} = response.data;
         await AsyncStorage.multiSet([
           ['@CodeApi:token', token],
@@ -50,7 +49,13 @@ export default class Login extends Component {
 
         this.props.navigation.navigate('MainPage');
       } catch (response) {
-        Alert.alert('Login não efetuado.', response.data.message);
+        if (!response.data) {
+          Alert.alert(
+            'Servidor está indisponível no momento, tente novamente mais tarde.',
+          );
+        } else {
+          Alert.alert('Login não efetuado.', response.data.message);
+        }
       }
     } else {
       Alert.alert('Preencha os campos, por favor.');
@@ -95,6 +100,7 @@ export default class Login extends Component {
           value={this.state.username}
           placeholderTextColor="#36D25C"
           style={style.textInputField}
+          onSubmitEditing={this.logIn}
         />
         <TextInput
           placeholder="senha"
@@ -103,6 +109,7 @@ export default class Login extends Component {
           value={this.state.password}
           placeholderTextColor="#36D25C"
           style={style.textInputField}
+          onSubmitEditing={this.logIn}
         />
         <TouchableOpacity
           onPress={this.logIn}
