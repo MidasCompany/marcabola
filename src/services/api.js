@@ -3,7 +3,7 @@ import {create} from 'apisauce';
 const tokens = {};
 
 const api = create({
-  baseURL: 'http://192.168.0.3:8080/',
+  baseURL: 'http://marcabola.midasbr.com/',
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
