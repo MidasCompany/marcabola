@@ -18,8 +18,8 @@ import {
 } from 'react-native-responsive-screen';
 import Yup from 'yup';
 import {TextInputMask} from 'react-native-masked-text';
-import {Calendar, LocaleConfig} from 'react-native-calendars';
-import {format, parseISO, addHours, setHours} from 'date-fns';
+import DatePicker from 'react-native-date-picker';
+import {format, subYears} from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 
 import Logo from '../../assets/logocalendario.png';
@@ -38,7 +38,8 @@ export default class Register extends Component {
       birthdate: null,
       username: null,
       password: null,
-      startForm: true,
+      formPage: 1,
+      date: new Date(),
     };
   }
 
@@ -69,6 +70,17 @@ export default class Register extends Component {
     } else {
       Alert.alert('Preencha os campos, por favor.');
     }
+  };
+
+  formatedDate = () => {
+    const formatedDate = format(
+      this.state.birthdate,
+      "dd 'de' MMMM' de 'yyyy'",
+      {
+        locale: ptBR,
+      },
+    );
+    return formatedDate;
   };
 
   register = async () => {
@@ -186,15 +198,30 @@ export default class Register extends Component {
             });
           }}
         />
-        <TextInputMask
-          type={'custom'}
-          options={{mask: '9999-99-99'}}
-          placeholder="AAAA-MM-DD"
-          placeholderTextColor="#36D25C"
-          style={styles.textfield}
-          onChangeText={birthdate => this.setState({birthdate})}
-          value={this.state.birthdate}
+        <Text style={styles.textfield}>Data de nascimento</Text>
+        <DatePicker
+          date={this.state.date}
+          fadeToColor={'none'}
+          style={{
+            backgroundColor: 'none',
+            border: 'none',
+            alignSelf: 'center',
+          }}
+          textColor={'#36D25C'}
+          mode={'date'}
+          locale={'pt_BR'}
+          onDateChange={this.handleDate}
         />
+        {this.state.birthdate ? (
+          <Text style={styles.textfield}>{this.formatedDate()}</Text>
+        ) : null}
+      </View>
+    );
+  };
+
+  thirdForm = () => {
+    return (
+      <View>
         <TextInput
           placeholder="nome de usuario"
           placeholderTextColor="#36D25C"
@@ -233,6 +260,11 @@ export default class Register extends Component {
     );
   };
 
+  handleDate = date => {
+    const _date = format(date, 'yyyy-dd-MM');
+    this.setState({birthdate: date});
+  };
+
   render() {
     return (
       <KeyboardAvoidingView
@@ -265,15 +297,19 @@ export default class Register extends Component {
             textAlign: 'center',
             padding: '2%',
           }}>
-          Cadastro
+          Cadastro {this.state.formPage}
         </Text>
-        {this.state.startForm === true ? this.firstForm() : this.secondForm()}
+        {this.state.formPage === 1
+          ? this.firstForm()
+          : this.state.formPage === 2
+          ? this.secondForm()
+          : this.thirdForm()}
 
         <View>
-          {this.state.startForm === true ? (
+          {this.state.formPage === 1 ? (
             <TouchableOpacity
               onPress={() => {
-                this.setState({startForm: false});
+                this.setState({formPage: this.state.formPage + 1});
               }}>
               <Text
                 style={{
@@ -284,10 +320,43 @@ export default class Register extends Component {
                 >
               </Text>
             </TouchableOpacity>
-          ) : (
+          ) : null}
+
+          {this.state.formPage === 2 ? (
+            <View style={{flexDirection: 'row', alignSelf: 'center'}}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.setState({formPage: this.state.formPage - 1});
+                }}>
+                <Text
+                  style={{
+                    fontSize: wp('15%'),
+                    alignSelf: 'center',
+                    color: '#36D25C',
+                  }}>
+                  {'<'}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  this.setState({formPage: this.state.formPage + 1});
+                }}>
+                <Text
+                  style={{
+                    fontSize: wp('15%'),
+                    alignSelf: 'center',
+                    color: '#36D25C',
+                  }}>
+                  >
+                </Text>
+              </TouchableOpacity>
+            </View>
+          ) : null}
+
+          {this.state.formPage === 3 ? (
             <TouchableOpacity
               onPress={() => {
-                this.setState({startForm: true});
+                this.setState({formPage: this.state.formPage - 1});
               }}>
               <Text
                 style={{
@@ -298,7 +367,7 @@ export default class Register extends Component {
                 {'<'}
               </Text>
             </TouchableOpacity>
-          )}
+          ) : null}
         </View>
       </KeyboardAvoidingView>
     );

@@ -1,6 +1,5 @@
 /* eslint-disable no-undef */
 import React, {Component} from 'react';
-
 import {
   View,
   StyleSheet,
@@ -12,11 +11,8 @@ import {
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 import {format, parseISO, addHours, setHours} from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
-
 import ModalDropdown from 'react-native-modal-dropdown';
-
 import AsyncStorage from '@react-native-community/async-storage';
-
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -25,13 +21,9 @@ import {
 import api from '../services/api';
 
 import xMark from '../../assets/xmark.png';
-
 import Star from '../../assets/greenstar.png';
-
 import Placeholder from '../../assets/greenplaceholder.png';
-
 import Coin from '../../assets/greencoin.png';
-
 import Negative from '../../assets/negative.png';
 import Plus from '../../assets/plus.png';
 
@@ -162,7 +154,7 @@ export default class Arena extends Component {
         },
       );
       console.log(response);
-      Alert.alert('Parabéns, você conseguiu marcar sua bola', null, [
+      Alert.alert('Parabéns, você conseguiu marcar sua bola.', null, [
         {
           text: 'Valeu :)',
           onPress: () => this.props.navigation.navigate('ReservesPage'),
