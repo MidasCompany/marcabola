@@ -28,7 +28,7 @@ export default class Main extends Component {
 
   logOut = async () => {
     await AsyncStorage.clear();
-    //this.isLogged();
+    this.isLogged();
   };
 
   isLogged = async () => {
@@ -41,6 +41,7 @@ export default class Main extends Component {
       });
     }
   };
+
   componentDidUpdate() {
     this.isLogged();
   }

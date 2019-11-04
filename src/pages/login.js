@@ -49,13 +49,8 @@ export default class Login extends Component {
 
         this.props.navigation.navigate('MainPage');
       } catch (response) {
-        if (!response.data) {
-          Alert.alert(
-            'Servidor está indisponível no momento, tente novamente mais tarde.',
-          );
-        } else {
-          Alert.alert('Login não efetuado.', response.data.message);
-        }
+        console.log(response);
+        Alert.alert(response.data.message);
       }
     } else {
       Alert.alert('Preencha os campos, por favor.');

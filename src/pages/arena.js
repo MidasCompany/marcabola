@@ -101,6 +101,7 @@ export default class Arena extends Component {
       />
     );
   };
+
   handleWithDropdown = hour => {
     this.setState({timeStart: hour, totalHours: 1});
     this.handleWithPrice();

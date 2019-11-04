@@ -9,6 +9,7 @@ import {
   TextInput,
   Alert,
   KeyboardAvoidingView,
+  Keyboard,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {
@@ -16,6 +17,10 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import Yup from 'yup';
+import {TextInputMask} from 'react-native-masked-text';
+import {Calendar, LocaleConfig} from 'react-native-calendars';
+import {format, parseISO, addHours, setHours} from 'date-fns';
+import ptBR from 'date-fns/locale/pt-BR';
 
 import Logo from '../../assets/logocalendario.png';
 import api from '../services/api';
@@ -38,6 +43,7 @@ export default class Register extends Component {
   }
 
   logIn = async () => {
+    Keyboard.dismiss();
     if (this.state.username && this.state.password) {
       try {
         const response = await api.post('api/sessions', {
@@ -144,12 +150,17 @@ export default class Register extends Component {
           onChangeText={email => this.setState({email})}
           value={this.state.email}
         />
-        <TextInput
+        <TextInputMask
           placeholder="cpf"
           placeholderTextColor="#36D25C"
           style={styles.textfield}
-          onChangeText={cpf => this.setState({cpf})}
+          type={'cpf'}
           value={this.state.cpf}
+          onChangeText={text => {
+            this.setState({
+              cpf: text,
+            });
+          }}
         />
       </View>
     );
@@ -158,15 +169,27 @@ export default class Register extends Component {
   secondForm = () => {
     return (
       <View>
-        <TextInput
+        <TextInputMask
           placeholder="telefone"
           placeholderTextColor="#36D25C"
           style={styles.textfield}
-          onChangeText={phone => this.setState({phone})}
+          type={'cel-phone'}
+          options={{
+            maskType: 'BRL',
+            withDDD: true,
+            dddMask: '(99) ',
+          }}
           value={this.state.phone}
+          onChangeText={text => {
+            this.setState({
+              phone: text,
+            });
+          }}
         />
-        <TextInput
-          placeholder="data de nasc."
+        <TextInputMask
+          type={'custom'}
+          options={{mask: '9999-99-99'}}
+          placeholder="AAAA-MM-DD"
           placeholderTextColor="#36D25C"
           style={styles.textfield}
           onChangeText={birthdate => this.setState({birthdate})}
