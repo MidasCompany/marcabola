@@ -69,7 +69,7 @@ export default class Arenas extends Component {
         </TouchableOpacity>
         <Text
           style={{
-            color: '#4F0259',
+            color: '#FFFFFF',
             alignSelf: 'center',
             textAlign: 'center',
             fontSize: hp('4%'),

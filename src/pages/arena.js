@@ -172,7 +172,7 @@ export default class Arena extends Component {
         textStyle={{fontSize: 20, color: 'white'}}
         style={styles.favoriteBackground}
         dropdownTextStyle={{fontSize: 20}}
-        defaultValue="Escolha seu horário de início"
+        defaultValue="Escolha seu horário"
         onSelect={(index, value) => {
           this.handleWithDropdown(value);
         }}
@@ -309,7 +309,7 @@ export default class Arena extends Component {
                   this.setState({dateSelected: null});
                 }}
                 style={styles.confirmBackground}>
-                <Text style={styles.confirmText}>Escolher data de novo</Text>
+                <Text style={styles.confirmText}>Mudar data</Text>
               </TouchableOpacity>
               <Text style={styles.confirmText}>
                 {this.state.dateSelectedFormated}

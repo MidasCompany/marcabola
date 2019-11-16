@@ -39,9 +39,9 @@ export default class Question extends Component {
 
           <View style={styles.backgroundQuestion}>
             <Text style={styles.textQuestion}>
-              Sentimos muito pelo imprevisto, mas infelizmente acontece
-              imprevistos acontecem, mas não se preocupe, nós providenciamos
-              reembolso, o prazo depende da forma de pagamento.
+              Sentimos muito pelo imprevisto, mas infelizmente imprevistos
+              acontecem, mas não se preocupe, nós providenciamos reembolso, o
+              prazo depende da forma de pagamento.
             </Text>
           </View>
         </ScrollView>

@@ -19,7 +19,7 @@ import {
 import Yup from 'yup';
 import {TextInputMask} from 'react-native-masked-text';
 import DatePicker from 'react-native-date-picker';
-import {format, subYears} from 'date-fns';
+import {format, subYears, parseISO} from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 
 import Logo from '../../assets/logocalendario.png';
@@ -181,6 +181,31 @@ export default class Register extends Component {
   secondForm = () => {
     return (
       <View>
+        <Text style={styles.textfield}>Data de nascimento</Text>
+        <DatePicker
+          date={this.state.date}
+          maximumDate={subYears(parseISO(format(new Date(), 'yyyy-MM-dd')), 18)}
+          fadeToColor={'none'}
+          style={{
+            backgroundColor: 'none',
+            border: 'none',
+            alignSelf: 'center',
+          }}
+          textColor={'#36D25C'}
+          mode={'date'}
+          locale={'pt_BR'}
+          onDateChange={this.handleDate}
+        />
+        {this.state.birthdate ? (
+          <Text style={styles.textfieldbigger}>{this.formatedDate()}</Text>
+        ) : null}
+      </View>
+    );
+  };
+
+  thirdForm = () => {
+    return (
+      <View>
         <TextInputMask
           placeholder="telefone"
           placeholderTextColor="#36D25C"
@@ -198,30 +223,6 @@ export default class Register extends Component {
             });
           }}
         />
-        <Text style={styles.textfield}>Data de nascimento</Text>
-        <DatePicker
-          date={this.state.date}
-          fadeToColor={'none'}
-          style={{
-            backgroundColor: 'none',
-            border: 'none',
-            alignSelf: 'center',
-          }}
-          textColor={'#36D25C'}
-          mode={'date'}
-          locale={'pt_BR'}
-          onDateChange={this.handleDate}
-        />
-        {this.state.birthdate ? (
-          <Text style={styles.textfield}>{this.formatedDate()}</Text>
-        ) : null}
-      </View>
-    );
-  };
-
-  thirdForm = () => {
-    return (
-      <View>
         <TextInput
           placeholder="nome de usuario"
           placeholderTextColor="#36D25C"
@@ -232,6 +233,7 @@ export default class Register extends Component {
         <TextInput
           placeholder="senha"
           placeholderTextColor="#36D25C"
+          secureTextEntry={true}
           style={styles.textfield}
           onChangeText={password => this.setState({password})}
           value={this.state.password}
@@ -261,7 +263,7 @@ export default class Register extends Component {
   };
 
   handleDate = date => {
-    const _date = format(date, 'yyyy-dd-MM');
+    //const _date = format(date, 'yyyy-dd-MM');
     this.setState({birthdate: date});
   };
 
@@ -297,7 +299,7 @@ export default class Register extends Component {
             textAlign: 'center',
             padding: '2%',
           }}>
-          Cadastro {this.state.formPage}
+          Cadastro
         </Text>
         {this.state.formPage === 1
           ? this.firstForm()
@@ -381,6 +383,13 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderBottomWidth: 2,
     borderBottomColor: '#C004D9',
+    width: '80%',
+    textAlign: 'center',
+  },
+  textfieldbigger: {
+    color: '#36D25C',
+    fontSize: hp('4%'),
+    alignSelf: 'center',
     width: '80%',
     textAlign: 'center',
   },
